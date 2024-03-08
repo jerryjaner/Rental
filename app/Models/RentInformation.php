@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\RenewApartmentContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RentInformation extends Model
 {
@@ -18,4 +19,11 @@ class RentInformation extends Model
         'status',
 
     ];
+
+    public function renewcontracts(){
+
+       return $this->hasMany(RenewApartmentContract::class, 'rent_info_id', 'id');
+    }
+
+
 }

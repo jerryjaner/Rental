@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use App\Models\RentInformation;
+use App\Models\RenewApartmentContract;
+use Carbon\Carbon;
 
 class RentController extends Controller
 {
@@ -14,8 +16,15 @@ class RentController extends Controller
         return view('ApartmentRent.index',compact('rooms'));
     }
 
-    public function store(Request $request){
 
+    public function fetchRooms()
+    {
+        $rooms = Room::where('room_status', 'Available')->get();
+
+        return response()->json(['rooms' => $rooms]);
+    }
+
+    public function store(Request $request){
 
         $validator = \Validator::make($request -> all(),[
 
@@ -24,7 +33,6 @@ class RentController extends Controller
             'date' => 'required',
             'status'  => 'required',
             'rent_fee'  => 'required',
-
 
         ]);
 
@@ -45,15 +53,18 @@ class RentController extends Controller
             $create->save();
 
 
-           return Room::where('room_number', '=', $request -> room_number)->update(['room_status'=> 'Not Available']);
+            foreach ($request->inputs as $key => $value) {
+                $value['rent_info_id'] =  $create->id;
+                RenewApartmentContract::create($value);
+            }
 
-
-
+            return Room::where('room_number', '=', $request -> room_number)->update(['room_status'=> 'Not Available']);
 
             return response()->json([
                 'code' => 200,
                 'msg' => 'Created Successfully',
             ]);
+
         }
 
     }
@@ -66,15 +77,15 @@ class RentController extends Controller
         if ($datas->count() > 0) {
             $output .= '<table class="table table-striped align-end" id="sample1">
                     <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Tenant Name</th>
-                        <th>Date</th>
-                        <th>Room Number</th>
-                        <th>Rent Fee</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
+                        <tr>
+                            <th>No</th>
+                            <th>Tenant Name</th>
+                            <th>Date</th>
+                            <th>Room Number</th>
+                            <th>Rent Fee</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
                     <tbody>';
             foreach ($datas as $data) {
@@ -103,7 +114,7 @@ class RentController extends Controller
 
     public function edit(Request $request) {
 
-		$data = RentInformation::find($request->id);
+		$data = RentInformation::with('renewcontracts')->find($request->id);
 
 		return response()->json($data);
 	}
@@ -136,6 +147,26 @@ class RentController extends Controller
             $update -> status = $request->status;
             $update -> rent_fee = $request->rent_fee;
             $update->update();
+
+            $canInsert = true;
+
+            foreach ($request->inputs as $key => $value) {
+                // Check if any value is null
+                foreach ($value as $inputValue) {
+                    if ($inputValue === null) {
+                        $canInsert = false;
+                        break 2; // Break out of both loops
+                    }
+                }
+            }
+
+            if ($canInsert) {
+                foreach ($request->inputs as $key => $value) {
+                    $value['rent_info_id'] = $update->id;
+                    RenewApartmentContract::create($value);
+                }
+            }
+
 
             return response()->json([
                 'code' => 200,

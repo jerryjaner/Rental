@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/apartment/edit', [RentController::class, 'edit'])->name('apartment.edit');
     Route::post('/apartment/update', [RentController::class, 'update'])->name('apartment.update');
     Route::delete('/apartment/delete', [RentController::class, 'delete'])->name('apartment.delete');
+    Route::get('/fetch-rooms', 'ApartmentController@fetchRooms')->name('fetch.rooms');
 
     Route::get('/room', [RoomController::class, 'index'])->name('room.index');
     Route::post('/room/store', [RoomController::class, 'store'])->name('room.store');
@@ -59,6 +60,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/room/edit', [RoomController::class, 'edit'])->name('room.edit');
     Route::post('/room/update', [RoomController::class, 'update'])->name('room.update');
     Route::delete('/room/delete', [RoomController::class, 'delete'])->name('room.delete');
+
+
+
 
 
 });

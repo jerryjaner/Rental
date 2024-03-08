@@ -73,6 +73,7 @@
                         <span class="text-danger error-text room_number_error"></span>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-lg mb-3">
                         <label>Rent Fee</label>
@@ -91,6 +92,31 @@
                         <span class="text-danger error-text status_error"></span>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg mb-3">
+                        <div id="input-group-container" class="mb-3">
+                            <div class="input-group mb-3">
+                                <table class="table table-bordered" id="repeater">
+                                    <tr>
+                                        <td colspan="3" class="text-center">
+                                            <b> Create New Contract</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                    </tr>
+                                    <tr>
+                                        <td> <input type="date" class="form-control" placeholder="Start Date" name="inputs[0][renew_start_date]"></td>
+                                        <td> <input type="date" class="form-control" placeholder="End Date" name="inputs[0][renew_end_date]"></td>
+                                        <td><button type="button" name="add" id="add" class="btn btn-success" >Add More</button></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" id="close_modal">Close</button>
@@ -107,7 +133,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title text-primary" id="exampleModalLabel">Add New Apartmment Rental</h5>
+            <h5 class="modal-title text-primary" id="exampleModalLabel">Update Apartmment Rental</h5>
         </div>
         <form action="{{ route('apartment.update') }}" method="POST" id="edit_data" enctype="multipart/form-data">
             @csrf
@@ -123,8 +149,6 @@
                 <div class="row">
                     <div class="col-lg mb-3">
                         <label>Date</label>
-
-
                         <input type="date" name="date"  class="form-control" placeholder="Date" id="date">
                         <span class="text-danger error-text date_error"></span>
                     </div>
@@ -153,6 +177,58 @@
                         <span class="text-danger error-text status_error"></span>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-lg mb-3">
+                        <div id="input-group-container" class="mb-3">
+                            <div class="input-group mb-3">
+                                <table class="table table-bordered" id="repeater">
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b>Contract</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                    </tr>
+                                    <tbody id="data">
+                                        <!-- Table rows will be populated dynamically via AJAX -->
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg mb-3">
+                        <div id="input-group-container" class="mb-3">
+                            <div class="input-group mb-3">
+                                <table class="table table-bordered" id="repeater1">
+                                    <tr>
+                                        <td colspan="3" class="text-center">
+                                            <b> Create New Contract</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                    </tr>
+                                    <tr>
+                                        <td> <input type="date" class="form-control" placeholder="Start Date" name="inputs[0][renew_start_date]"></td>
+                                        <td> <input type="date" class="form-control" placeholder="End Date" name="inputs[0][renew_end_date]"></td>
+
+                                        <td><button type="button" name="add1" id="add1" class="btn btn-success" >Add More</button></td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" id="edit_close_modal">Close</button>
@@ -177,77 +253,74 @@
 
         getdata();
 
-        function getdata(){
-            $.ajax({
-                url: '{{ route('apartment.fetch') }}',
-                method: 'GET',
-                success: function(response) {
-                   $("#show_all_apartment_data").html(response);
-                    $('#sample1').DataTable({
-                        order: [0, 'desc']
-                    });
-                }
-            });
-        }
-
-        $('#create_rental').on('submit',function (e) {
-
-            e.preventDefault();
-            $("#btnSubmit").text('Submitting. . .');
-            $('#btnSubmit').attr("disabled", true);
-
-            var form = this; //FORM
-            $.ajax({
-                url:$(form).attr('action'),
-                method:$(form).attr('method'),
-                data: new FormData(form),
-                processData: false,
-                dataType: "json",
-                contentType:false,
-                beforeSend: function(){
-                    //Before Sending The Form
-                    $(form).find('span.error-text').text('')
-                },
-                success: function(response) {
-                    if(response.code == 0)
-                    {
-                        $('#btnSubmit').removeAttr("disabled"); // removing disabled button
-                        //The Error Message Will Append
-                        $.each(response.error, function(prefix, val){
-                            $(form).find('span.'+prefix+'_error').text(val[0]);
+            function getdata(){
+                $.ajax({
+                    url: '{{ route('apartment.fetch') }}',
+                    method: 'GET',
+                    success: function(response) {
+                    $("#show_all_apartment_data").html(response);
+                        $('#sample1').DataTable({
+                            order: [0, 'desc']
                         });
-                        $('#btnSubmit').text('Submit');
+                    }
+                });
+            }
+
+            $('#create_rental').on('submit',function (e) {
+
+                e.preventDefault();
+                $("#btnSubmit").text('Submitting. . .');
+                $('#btnSubmit').attr("disabled", true);
+
+                var form = this; //FORM
+                $.ajax({
+                    url:$(form).attr('action'),
+                    method:$(form).attr('method'),
+                    data: new FormData(form),
+                    processData: false,
+                    dataType: "json",
+                    contentType:false,
+                    beforeSend: function(){
+                        $(form).find('span.error-text').text('')
+                    },
+                    success: function(response) {
+                        if(response.code == 0)
+                        {
+                            $('#btnSubmit').removeAttr("disabled");
+
+                            $.each(response.error, function(prefix, val){
+                                $(form).find('span.'+prefix+'_error').text(val[0]);
+                            });
+                            $('#btnSubmit').text('Submit');
+
+                        }
+                        else
+                        {
+                            $(form)[0].reset();
+                            $('#btnSubmit').removeAttr("disabled");
+                            $('#btnSubmit').text('Submit');
+                            $('#room_number').html(response.html);
+                            getdata();
+                            Swal.fire({
+
+                                icon: 'success',
+                                title: 'Created Successfully',
+                                showConfirmButton: false,
+                                timer: 1700,
+                                timerProgressBar: true,
+
+                            });
+
+                            $('#create').modal('hide');
+                        }
+                        $('#close_modal').on('click', function () {
+                            $(form)[0].reset();
+                            $(form).find('span.error-text').text('');
+                        });
 
                     }
-                    else
-                    {
-                        $(form)[0].reset(); // TO REST FORM
-                        $('#btnSubmit').removeAttr("disabled"); // removing disabled button
-                        $('#btnSubmit').text('Submit');   //change the text to normal
-                        getdata();
-                        // SWEETALERT
-                        Swal.fire({
-
-                            icon: 'success',
-                            title: 'Created Successfully',
-                            showConfirmButton: false,
-                            timer: 1700,
-                            timerProgressBar: true,
-
-                        });
-
-                        $('#create').modal('hide'); // Close the modal
-
-
-                    }
-                    $('#close_modal').on('click', function () {
-                        $(form)[0].reset();
-                        $(form).find('span.error-text').text('');
-                    });
-
-                }
+                });
             });
-        });
 
         $(document).on('click', '.delete', function(e) {
             e.preventDefault();
@@ -291,20 +364,34 @@
             e.preventDefault();
             let id = $(this).attr('id');
             $.ajax({
-            url: '{{ route('apartment.edit') }}',
-            method: 'GET',
-            data: {
-                id: id,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                $("#edit_id").val(response.id);
-                $("#tenant_name").val(response.tenant_name);
-                $("#date").val(response.date);
-                $("#room_number").val(response.room_number);
-                $("#rent_fee").val(response.rent_fee);
-                $("#status").val(response.status);
-            }
+                url: '{{ route('apartment.edit') }}',
+                method: 'GET',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $("#edit_id").val(response.id);
+                    $("#tenant_name").val(response.tenant_name);
+                    $("#date").val(response.date);
+                    $("#room_number").val(response.room_number);
+                    $("#rent_fee").val(response.rent_fee);
+                    $("#status").val(response.status);
+
+                    $("#data").empty();
+
+                    response.renewcontracts.forEach(function(data) {
+                        var dataHtml = '<tr>' +
+                            '<td> <input type="text" class="form-control" placeholder="Start Date" name="inputs[0][renew_start_date]" value="' + data.renew_start_date + '" readonly></td>' +
+                            '<td> <input type="text" class="form-control" placeholder="End" name="inputs[0][renew_end_date]" value="' + data.renew_end_date + '" readonly></td>' +
+
+                            '</tr>';
+
+                        $("#data").append(dataHtml);
+                    });
+
+                }
+
             });
         });
 
@@ -368,6 +455,51 @@
     });
 </script>
 
+<script>
+    var i = 0;
+    $("#add").click(function(){
+        ++i;
 
+        $('#repeater').append(
+
+            `<tr>
+                <td> <input type="date" class="form-control" placeholder="Start Date" name="inputs[`+i+`][renew_start_date]"></td>
+                <td> <input type="date" class="form-control" placeholder="End Date " name="inputs[`+i+`][renew_end_date]"></td>
+                <td>
+                    <button type="button" class="btn btn-danger remove-table-row">Remove</button>
+                 </td>
+             </tr>`);
+
+
+    });
+
+   $(document).on('click', '.remove-table-row', function(){
+        $(this).parents('tr').remove();
+   });
+</script>
+
+<script>
+    var i = 0;
+    $("#add1").click(function(){
+        ++i;
+
+        $('#repeater1').append(
+
+            `<tr>
+                <td> <input type="date" class="form-control" placeholder="Start Date" name="inputs[`+i+`][renew_start_date]"></td>
+                <td> <input type="date" class="form-control" placeholder="End Date " name="inputs[`+i+`][renew_end_date]"></td>
+                <td>
+                    <button type="button" class="btn btn-danger remove-table-row1">Remove</button>
+                 </td>
+             </tr>`);
+
+
+    });
+
+   $(document).on('click', '.remove-table-row1', function(){
+        $(this).parents('tr').remove();
+   });
+
+</script>
 
 @endsection

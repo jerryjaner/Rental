@@ -84,7 +84,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title text-primary" id="exampleModalLabel">Add New Apartmment Rental</h5>
+            <h5 class="modal-title text-primary" id="exampleModalLabel">Update Room</h5>
         </div>
         <form action="{{ route('room.update') }}" method="POST" id="edit_data" enctype="multipart/form-data">
             @csrf
