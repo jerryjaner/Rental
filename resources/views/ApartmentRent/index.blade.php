@@ -175,7 +175,7 @@
                 <div class="row">
                     <div class="col-lg mb-3">
                         <label>Room Number</label>
-                        <input type="text" name="room_number"  class="form-control" placeholder="Room Number" id="room_number" readonly>
+                        <input type="text" name="room_number"  class="form-control" placeholder="Room Number" id="tenant_room_number" readonly>
                         <span class="text-danger error-text room_number_error"></span>
                     </div>
                 </div>
@@ -433,7 +433,7 @@
                     $("#edit_id").val(response.id);
                     $("#tenant_name").val(response.tenant_name);
                     $("#date").val(response.date);
-                    $("#room_number").val(response.room_number);
+                    $("#tenant_room_number").val(response.room_number);
                     $("#rent_fee").val(response.rent_fee);
                     $("#status").val(response.status);
 
