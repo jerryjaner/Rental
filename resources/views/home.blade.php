@@ -1,93 +1,148 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">{{ __('Dashboard') }}</h1>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">
-                                <canvas id="bar-chart" width="800" height="150"></canvas>
-                            </p>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Family Table -->
+<!-- Family Table -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    {{-- <div class="card-header w-100 d-flex ">
+                        <h4 class="text-dark pt-2" style="width:10%">All Records</h4>
+                        <div class="text-center">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    <input type="date" class="form-control" id="start_date" placeholder="Start Date">
+                                </div>
+                                <div class="col-xl-4">
+                                    <input type="date" class="form-control" id="end_date" placeholder="End Date">
+                                </div>
+                                <div class="col-xl-4">
+                                    <button id="filter" class="btn btn-primary btn-sm">Filter</button>
+                                    <button id="reset" class="btn btn-success btn-sm">Refresh</button>
+                                    <button id="print" class="btn btn-info btn-sm">Print</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
+                    <div class="card-header w-100 d-flex justify-content-space-between">
+                        <h4 class="text-dark pt-2" style="width: 10%;">All Records</h4>
+                        <div class="text-center d-flex justify-content-end align-items-center flex-grow-1">
+                            <div class="row mx-0">
+                                <div class="col-xl-4 px-1">
+                                    <input type="date" class="form-control" id="start_date" placeholder="Start Date" required>
+                                </div>
+                                <div class="col-xl-4 px-1">
+                                    <input type="date" class="form-control mr-1" id="end_date" placeholder="End Date" required>
+                                </div>
+                                <div class="col-xl-4 px-1 d-flex justify-content-end">
+                                    <button id="filter" class="btn btn-primary btn-sm flex-fill mr-1">Filter</button>
+                                    <button id="reset" class="btn btn-success btn-sm flex-fill mr-1">Refresh</button>
+                                    <button id="print" class="btn btn-info btn-sm flex-fill">Print</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="card-body">
+                        <div class="table-container">
+
+                            <div class="card-body" id="record">
+                                <h1 class="text-center text-secondary my-5">Loading...</h1>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </div>
-    <!-- /.content -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('bar-chart').getContext('2d');
-        var data = @json($data);
 
-        var labels = [];
-        var paidCounts = [];
-        var unpaidCounts = [];
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
 
-        data.forEach(function(item) {
-            // Convert month number to word
-            var monthName = new Date(Date.UTC(2000, item.month - 1, 1)).toLocaleString('en-US', { month: 'long' });
-            var label = monthName + ' ' + item.year;
 
-            if (!labels.includes(label)) {
-                labels.push(label);
-                paidCounts.push(0);
-                unpaidCounts.push(0);
-            }
+<script>
+  document.getElementById("print").addEventListener("click", function() {
+    var printContents = document.getElementById("record_table_wrapper").cloneNode(true);
+    var originalContents = document.body.innerHTML;
 
-            if (item.status === 'Paid') {
-                paidCounts[labels.indexOf(label)] = item.count;
-            } else {
-                unpaidCounts[labels.indexOf(label)] = item.count;
-            }
-        });
+    // Remove pagination, search bar, and data entries
+    printContents.getElementsByClassName("dataTables_paginate")[0].style.display = "none";
+    printContents.getElementsByClassName("dataTables_filter")[0].style.display = "none";
+    printContents.getElementsByClassName("dataTables_info")[0].style.display = "none";
+    printContents.getElementsByClassName("dataTables_length ")[0].style.display = "none";
 
-        var myChart = new Chart(ctx, {
-            type: 'bar',
+    document.body.innerHTML = printContents.outerHTML;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+    location.reload();
+});
+
+</script>
+<script>
+
+$(document).ready(function () {
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    getRecords();
+
+    $('#filter').click(function () {
+        getRecords();
+    });
+
+    $('#reset').click(function () {
+        $('#start_date').val('');
+        $('#end_date').val('');
+        getRecords();
+    });
+
+    function getRecords() {
+        var startDate = $('#start_date').val();
+        var endDate = $('#end_date').val();
+
+        $.ajax({
+            url: '{{ route('get.record') }}',
+            method: 'GET',
             data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Paid',
-                    data: paidCounts,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }, {
-                    label: 'Unpaid',
-                    data: unpaidCounts,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
+                start_date: startDate,
+                end_date: endDate
             },
-            // options: {
-            //     scales: {
-            //         yAxes: [{
-            //             ticks: {
-            //                 beginAtZero: true
-            //             }
-            //         }]
-            //     }
-            // }
+            success: function (response) {
+                $("#record").html(response);
+                $('#record_table').DataTable({
+                    order: [0, 'desc'],
+                });
+
+            }
         });
-    </script>
+    }
+
+
+
+});
+
+</script>
 
 @endsection

@@ -13,13 +13,14 @@ class RenewApartmentContract extends Model
 
         'renew_start_date',
         'renew_end_date',
-        'rent_info_id'
+        'rent_info_id',
+        'status',
 
     ];
 
     public function rentinformation(){
 
-        return $this->belongsTo(RentInformation::class,)->withDefault();
+        return $this->belongsTo(RentInformation::class,'rent_info_id', 'id')->withDefault();
     }
 
 

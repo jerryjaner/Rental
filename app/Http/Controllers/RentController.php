@@ -12,17 +12,15 @@ class RentController extends Controller
 {
     public function index(){
 
-        $rooms = Room::where('room_status', 'Available')->get();
-        return view('ApartmentRent.index',compact('rooms'));
+        // $rooms = Room::where('room_status', 'Available')->get();
+        return view('ApartmentRent.index');
     }
 
-
-    public function fetchRooms()
-    {
+    public function getAvailableRooms() {
         $rooms = Room::where('room_status', 'Available')->get();
-
-        return response()->json(['rooms' => $rooms]);
+        return response()->json($rooms);
     }
+
 
     public function store(Request $request){
 
@@ -83,7 +81,7 @@ class RentController extends Controller
                             <th>Date</th>
                             <th>Room Number</th>
                             <th>Rent Fee</th>
-                            <th>Status</th>
+                            <th>Tenant Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>

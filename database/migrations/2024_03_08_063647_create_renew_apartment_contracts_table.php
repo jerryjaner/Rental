@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('rent_info_id');
             $table->date('renew_start_date')->nullable();
             $table->date('renew_end_date')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
 
             $table->foreign('rent_info_id')

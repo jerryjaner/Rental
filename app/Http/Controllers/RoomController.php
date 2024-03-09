@@ -64,7 +64,6 @@ class RoomController extends Controller
                         <td>' . $data->room_status . '</td>
                         <td>
                             <a href="#" id="' . $data->id . '" class="text-default  btn btn-success btn-sm mx-1 edit" data-bs-toggle="modal" data-bs-target="#edit">Edit</a>
-                            <a href="#" id="' . $data->id . '" class="text-default btn btn-danger btn-sm mx-1 delete">Delete</a>
                          </td>
                     </tr>';
             }
@@ -112,10 +111,10 @@ class RoomController extends Controller
         }
     }
 
-    public function delete(Request $request){
+    // public function delete(Request $request){
 
-        $data = Room::find($request->id);
-        Room::destroy($request->id);
-    }
+    //     $data = Room::find($request->id);
+    //     Room::destroy($request->id);
+    // }
 
 }

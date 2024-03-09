@@ -202,43 +202,7 @@
             });
         });
 
-        $(document).on('click', '.delete', function(e) {
-            e.preventDefault();
-            let id = $(this).attr('id');
-            let csrf = '{{ csrf_token() }}';
-            var reader = new FileReader();
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            })
-            .then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '{{ route('room.delete') }}',
-                        method: 'delete',
-                        data: {
-                            id: id,
-                            _token: csrf
-                        },
-                        success: function(response) {
-                            console.log(response);
-                            getroomdata();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Deleted Successfully.',
-                                showConfirmButton: false,
-                                timer: 1700,
-                            })
-                        }
-                    });
-                }
-            })
-        });
+
 
         $(document).on('click', '.edit', function(e) {
             e.preventDefault();

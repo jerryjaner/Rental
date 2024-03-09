@@ -37,7 +37,7 @@
 
 {{-- create --}}
 <div class="modal fade" id="create" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title text-primary" id="exampleModalLabel">Add New Apartmment Rental</h5>
@@ -63,11 +63,14 @@
                 <div class="row">
                     <div class="col-lg mb-3">
                         <label>Room Number</label>
-                        <select name="room_number" id="" class="form-select">
+                        {{-- <select name="room_number" id="" class="form-select">
                             <option value="">--Select an option--</option>
                             @foreach ($rooms as $room)
                                 <option value="{{ $room->room_number }}">{{ $room->room_number }}</option>
                             @endforeach
+                        </select> --}}
+                        <select name="room_number" id="room_number" class="form-select">
+                            <option value="">--Select an option--</option>
                         </select>
 
                         <span class="text-danger error-text room_number_error"></span>
@@ -83,6 +86,13 @@
                 </div>
                 <div class="row">
                     <div class="col-lg mb-3">
+                        <label>Tenant Status</label>
+                        <input type="text" name="status"  class="form-control" placeholder="Tenant Status" >
+                        <span class="text-danger error-text status_error"></span>
+                    </div>
+                </div>
+                {{-- <div class="row">
+                    <div class="col-lg mb-3">
                         <label>Status</label>
                         <select name="status" class="form-select" id="txt-type">
                             <option value="">Select Status</option>
@@ -91,24 +101,33 @@
                         </select>
                         <span class="text-danger error-text status_error"></span>
                     </div>
-                </div>
+                </div> --}}
                 <div class="row">
                     <div class="col-lg mb-3">
                         <div id="input-group-container" class="mb-3">
                             <div class="input-group mb-3">
                                 <table class="table table-bordered" id="repeater">
                                     <tr>
-                                        <td colspan="3" class="text-center">
+                                        <td colspan="4" class="text-center">
                                             <b> Create New Contract</b>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Start Date</th>
                                         <th>End Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                     <tr>
                                         <td> <input type="date" class="form-control" placeholder="Start Date" name="inputs[0][renew_start_date]"></td>
                                         <td> <input type="date" class="form-control" placeholder="End Date" name="inputs[0][renew_end_date]"></td>
+
+                                        <td> <select class="form-select" aria-label="status" name="inputs[0][status]">
+                                                <option selected>Payment Status</option>
+                                                <option value="Paid">Paid</option>
+                                                <option value="Unpaid">Unpaid</option>
+                                            </select>
+                                        </td>
                                         <td><button type="button" name="add" id="add" class="btn btn-success" >Add More</button></td>
                                     </tr>
                                 </table>
@@ -130,7 +149,7 @@
 
 {{-- edit --}}
 <div class="modal fade" id="edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title text-primary" id="exampleModalLabel">Update Apartmment Rental</h5>
@@ -169,11 +188,8 @@
                 </div>
                 <div class="row">
                     <div class="col-lg mb-3">
-                        <label>Status</label>
-                        <select name="status" class="form-select"  id="status">
-                            <option value="Paid">Paid</option>
-                            <option value="Unpaid">UnPaid</option>
-                        </select>
+                        <label>Tenant Status</label>
+                        <input type="text" name="status"  class="form-control" placeholder="Tenant Status" id="status">
                         <span class="text-danger error-text status_error"></span>
                     </div>
                 </div>
@@ -184,13 +200,16 @@
                             <div class="input-group mb-3">
                                 <table class="table table-bordered" id="repeater">
                                     <tr>
-                                        <td colspan="2" class="text-center">
+                                        <td colspan="4" class="text-center">
                                             <b>Contract</b>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Start Date</th>
                                         <th>End Date</th>
+                                        <th>Status</th>
+
+
                                     </tr>
                                     <tbody id="data">
                                         <!-- Table rows will be populated dynamically via AJAX -->
@@ -208,18 +227,27 @@
                             <div class="input-group mb-3">
                                 <table class="table table-bordered" id="repeater1">
                                     <tr>
-                                        <td colspan="3" class="text-center">
+                                        <td colspan="4" class="text-center">
                                             <b> Create New Contract</b>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Start Date</th>
                                         <th>End Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                     <tr>
                                         <td> <input type="date" class="form-control" placeholder="Start Date" name="inputs[0][renew_start_date]"></td>
                                         <td> <input type="date" class="form-control" placeholder="End Date" name="inputs[0][renew_end_date]"></td>
+                                        {{-- <td> <input type="text" class="form-control" placeholder="Status" name="inputs[0][status]"></td> --}}
 
+                                        <td> <select class="form-select" aria-label="status" name="inputs[0][status]">
+                                                <option selected>Payment Status</option>
+                                                <option value="Paid">Paid</option>
+                                                <option value="Unpaid">Unpaid</option>
+                                            </select>
+                                       </td>
                                         <td><button type="button" name="add1" id="add1" class="btn btn-success" >Add More</button></td>
                                     </tr>
 
@@ -250,6 +278,37 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+
+
+        function populateRoomDropdown() {
+            $.ajax({
+                url: "{{ route('get.available.rooms') }}",
+                type: 'GET',
+                success: function(response) {
+                    $('#room_number').empty();
+                    $('#room_number').append('<option value="">--Select an option--</option>');
+                    $.each(response, function(index, room) {
+                        $('#room_number').append('<option value="' + room.room_number + '">' + room.room_number + '</option>');
+                    });
+                }
+            });
+        }
+
+        // Call the function to populate room dropdown when modal is shown
+        $('#create').on('shown.bs.modal', function () {
+            populateRoomDropdown();
+        });
+
+        // Prevent form submission when an option is selected from the dropdown
+        $('#room_number').on('change', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            // You can perform any additional logic here if needed
+        });
+
+
+
+
 
         getdata();
 
@@ -384,7 +443,7 @@
                         var dataHtml = '<tr>' +
                             '<td> <input type="text" class="form-control" placeholder="Start Date" name="inputs[0][renew_start_date]" value="' + data.renew_start_date + '" readonly></td>' +
                             '<td> <input type="text" class="form-control" placeholder="End" name="inputs[0][renew_end_date]" value="' + data.renew_end_date + '" readonly></td>' +
-
+                            '<td> <input type="text" class="form-control" placeholder="End" name="inputs[0][status]" value="' + data.status + '" readonly></td>' +
                             '</tr>';
 
                         $("#data").append(dataHtml);
@@ -465,6 +524,12 @@
             `<tr>
                 <td> <input type="date" class="form-control" placeholder="Start Date" name="inputs[`+i+`][renew_start_date]"></td>
                 <td> <input type="date" class="form-control" placeholder="End Date " name="inputs[`+i+`][renew_end_date]"></td>
+                <td> <select class="form-select" aria-label="Status" name="inputs[`+i+`][status]">
+                    <option selected>Payment Status</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Unpaid">Unpaid</option>
+                    </select>
+                </td>
                 <td>
                     <button type="button" class="btn btn-danger remove-table-row">Remove</button>
                  </td>
@@ -488,6 +553,12 @@
             `<tr>
                 <td> <input type="date" class="form-control" placeholder="Start Date" name="inputs[`+i+`][renew_start_date]"></td>
                 <td> <input type="date" class="form-control" placeholder="End Date " name="inputs[`+i+`][renew_end_date]"></td>
+                <td> <select class="form-select" aria-label="Status" name="inputs[`+i+`][status]">
+                    <option selected>Payment Status</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Unpaid">Unpaid</option>
+                    </select>
+                </td>
                 <td>
                     <button type="button" class="btn btn-danger remove-table-row1">Remove</button>
                  </td>
