@@ -54,6 +54,14 @@ $route = Route::current()->getName();
                     </p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('archive.index') }}"  class="nav-link {{($route == 'archive.index')?'active':''}}">
+                    <i class="nav-icon fas fa-window-restore"></i>
+                    <p>
+                       Archive
+                    </p>
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a href="{{ route('users.index') }}" class="nav-link {{($route == 'users.index')?'active':''}}">

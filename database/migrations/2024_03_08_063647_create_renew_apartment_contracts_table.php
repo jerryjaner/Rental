@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('renew_start_date')->nullable();
             $table->date('renew_end_date')->nullable();
             $table->string('status')->nullable();
+            $table->softdeletes();
             $table->timestamps();
 
             $table->foreign('rent_info_id')

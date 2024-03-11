@@ -4,12 +4,14 @@ namespace App\Models;
 
 use App\Models\RenewApartmentContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RentInformation extends Model
 {
     use HasFactory;
-
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
     protected $fillable = [
 
         'date',

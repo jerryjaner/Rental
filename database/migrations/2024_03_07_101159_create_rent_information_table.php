@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('tenant_name')->nullable();
             $table->decimal('rent_fee', 10, 2);
             $table->string('status')->nullable();
+            $table->softdeletes();
             $table->timestamps();
 
         });

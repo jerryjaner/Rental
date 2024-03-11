@@ -208,14 +208,10 @@
                                         <th>Start Date</th>
                                         <th>End Date</th>
                                         <th>Status</th>
-
-
                                     </tr>
                                     <tbody id="data">
                                         <!-- Table rows will be populated dynamically via AJAX -->
-
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
@@ -241,7 +237,6 @@
                                         <td> <input type="date" class="form-control" placeholder="Start Date" name="inputs[0][renew_start_date]"></td>
                                         <td> <input type="date" class="form-control" placeholder="End Date" name="inputs[0][renew_end_date]"></td>
                                         {{-- <td> <input type="text" class="form-control" placeholder="Status" name="inputs[0][status]"></td> --}}
-
                                         <td> <select class="form-select" aria-label="status" name="inputs[0][status]">
                                                 <option selected>Payment Status</option>
                                                 <option value="Paid">Paid</option>
@@ -250,7 +245,6 @@
                                        </td>
                                         <td><button type="button" name="add1" id="add1" class="btn btn-success" >Add More</button></td>
                                     </tr>
-
                                 </table>
                             </div>
                         </div>
@@ -305,10 +299,6 @@
             event.preventDefault(); // Prevent default form submission
             // You can perform any additional logic here if needed
         });
-
-
-
-
 
         getdata();
 
@@ -388,7 +378,7 @@
             var reader = new FileReader();
             Swal.fire({
                 title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                //text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

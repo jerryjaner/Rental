@@ -75,7 +75,6 @@
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
 
-
 <script>
   document.getElementById("print").addEventListener("click", function() {
     var printContents = document.getElementById("record_table_wrapper").cloneNode(true);

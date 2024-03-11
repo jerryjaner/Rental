@@ -6,6 +6,7 @@ use App\Http\Controllers\RentController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RentalController;
+use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FamilyProfileController;
@@ -32,6 +33,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware('auth')->group(function () {
 
+
+    Route::get('/all-record',[HomeController::class, 'get_record'])->name("get.record");
+
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::get('fetchall', [UserController::class, 'fetchAll'])->name('fetchAll');
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -52,10 +56,9 @@ Route::middleware('auth')->group(function () {
     // Route::delete('/room/delete', [RoomController::class, 'delete'])->name('room.delete');
     Route::get('/get-available-rooms', [RentController::class, 'getAvailableRooms'])->name('get.available.rooms');
 
-    Route::get('/all-record',[HomeController::class, 'get_record'])->name("get.record");
-
-
-
-
+    Route::get('/archive', [ArchiveController::class, 'index'])->name('archive.index');
+    Route::get('/archive/trashed',[ArchiveController::class, 'trashed_data'])->name("archive.trashed");
+    Route::delete('/archive/force-delete', [ArchiveController::class, 'delete'])->name('archive.delete');
+    Route::post('/archive/force-restore', [ArchiveController::class, 'restore'])->name('archive.restore');
 
 });

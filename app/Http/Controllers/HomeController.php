@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\RentInformation;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\RenewApartmentContract;
 
@@ -39,12 +39,21 @@ class HomeController extends Controller
 
         if($startDate == null && $endDate == Null){
 
-           $datas = RenewApartmentContract::with('rentinformation')->get();
+        //$datas = RenewApartmentContract::with('rentinformation')->withTrashed()->get();
+        //    $datas = RenewApartmentContract::with('rentinformation')->withTrashed()->get();
+        $datas = RenewApartmentContract::with(['rentinformation' => function ($query) {
+            $query->withTrashed();
+        }])->get();
+
+
+          // dd($datas);
 
         }
         else{
 
-            $datas = RenewApartmentContract::with('rentinformation')
+            $datas = RenewApartmentContract::with(['rentinformation' => function ($query) {
+                        $query->withTrashed();
+                    }])
                     ->where('renew_start_date', '>=', $startDate)
                     ->where('renew_end_date', '<=', $endDate)
                     ->get();
